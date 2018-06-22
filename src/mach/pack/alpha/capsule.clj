@@ -75,6 +75,7 @@
     :parse-fn symbol]
    [nil "--application-id STRING" "globally unique name for application, used for caching"]
    [nil "--application-version STRING" "unique version for this uberjar, used for caching"]
+   [nil "--system-properties STRING" "space-separated list of propName=value pairs, specifying JVM System Properties which will be passed to the application. Maps to the 'System-Properties' entry in the Capsule Manifest."]
    ["-e" "--extra-path STRING" "add directory to classpath for building"
     :assoc-fn (fn [m k v] (update m k conj v))]
    ["-d" "--deps STRING" "deps.edn file location"
@@ -108,6 +109,7 @@
                  main
                  application-id
                  application-version
+                 system-properties
                  help]} :options
          [output] :arguments
          :as parsed-opts}
@@ -135,6 +137,8 @@
               [["Application-Class" "clojure.main"]
                ["Application-ID" application-id]
                ["Application-Version" application-version]]
+            system-properties
+            (conj ["System-Properties" system-properties])
             main
             (conj ["Args" (str "-m " main)])))))))
 
